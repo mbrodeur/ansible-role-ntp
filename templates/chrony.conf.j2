@@ -1,14 +1,13 @@
-# {{ ansible_managed }}
+{{ ansible_managed | comment }}
 
-# These servers were defined in the installation:
-{% for server in ntp_servers %}
-server {{ server }}
-{% endfor %}
 # Use public servers from the pool.ntp.org project.
 # Please consider joining the pool (http://www.pool.ntp.org/join.html).
+{% for item in ntp_servers %}
+pool {{ item }}
+{% endfor %}
 
 # Record the rate at which the system clock gains/losses time.
-driftfile /var/lib/chrony/drift
+driftfile {{ ntp_driftfile }}
 
 # Allow the system clock to be stepped in the first three updates
 # if its offset is larger than 1 second.
@@ -25,16 +24,39 @@ rtcsync
 #minsources 2
 
 # Allow NTP client access from local network.
-#allow 192.168.0.0/16
+{% for item in ntp_chrony_allow %}
+allow {{ item }}
+{% endfor %}
 
 # Serve time even if not synchronized to a time source.
 #local stratum 10
 
+# Require authentication (nts or key option) for all NTP sources.
+#authselectmode require
+
 # Specify file containing keys for NTP authentication.
 #keyfile /etc/chrony.keys
+
+# Save NTS keys and cookies.
+#ntsdumpdir /var/lib/chrony
+
+# Insert/delete leap seconds by slewing instead of stepping.
+#leapsecmode slew
+
+# Get TAI-UTC offset and leap seconds from the system tz database.
+#leapsectz right/UTC
 
 # Specify directory for log files.
 logdir /var/log/chrony
 
 # Select which information is logged.
 #log measurements statistics tracking
+{% if ntp_custom_settings | length > 0 %}
+
+# Additional settings added via ntp_custom_settings
+# Please consider extending ansible-role-ntp to support these
+# options if other users might find them useful.
+{%   for item in ntp_custom_settings %}
+{{ item }}
+{%   endfor %}
+{% endif %}

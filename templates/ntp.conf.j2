@@ -79,3 +79,12 @@ disable monitor
 # next lines. Please do this only if you trust everybody on the network!
 #disable auth
 #broadcastclient
+{% if ntp_custom_settings | length > 0 %}
+
+# Additional settings added via ntp_custom_settings
+# Please consider extending ansible-role-ntp to support these
+# options if other users might find them useful.
+{%   for item in ntp_custom_settings %}
+{{ item }}
+{%   endfor %}
+{% endif %}

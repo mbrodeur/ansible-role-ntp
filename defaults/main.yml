@@ -18,6 +18,8 @@ ntp_servers:
   - "2{{ '.' + ntp_area if ntp_area else '' }}.pool.ntp.org iburst"
   - "3{{ '.' + ntp_area if ntp_area else '' }}.pool.ntp.org iburst"
 
+# ntpd only
+# Use ntp_chrony_allow for chrony acccess control
 ntp_restrict:
   - "127.0.0.1"
   - "::1"
@@ -25,3 +27,9 @@ ntp_restrict:
 ntp_cron_handler_enabled: false
 
 ntp_tinker_panic: false
+
+# Clients which are allowed to access chronyd as a server
+ntp_chrony_allow: []
+
+# Allow for settings not yet directly managed by this role
+ntp_custom_settings: []
