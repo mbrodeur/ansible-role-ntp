@@ -22,6 +22,24 @@
     ntp_daemon: "{{ __ntp_daemon }}"
   when: ntp_daemon is not defined
 
+# What if these aren't in the var files?
+- name: 'Set the ntp_keyfile variable.'
+  set_fact:
+    ntp_keyfile: "{{ __ntp_keyfile }}"
+  when: ntp_keyfile is not defined
+
+- name: 'Set the ntp_ntsdumpdir variable.'
+  set_fact:
+    ntp_ntsdumpdir: "{{ __ntp_ntsdumpdir }}"
+  when: ntp_ntsdumpdir is not defined
+
+- name: 'Set the ntp_leapsectz variable.'
+  set_fact:
+    ntp_leapsectz: "{{ __ntp_leapsectz }}"
+  when: ntp_leapsectz is not defined
+# end my local additions
+
+
 - name: Ensure NTP package is installed.
   package:
     name: "{{ ntp_package }}"

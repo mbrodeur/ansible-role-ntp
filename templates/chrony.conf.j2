@@ -1,7 +1,7 @@
 {{ ansible_managed | comment }}
 
 # Use public servers from the pool.ntp.org project.
-# Please consider joining the pool (http://www.pool.ntp.org/join.html).
+# Please consider joining the pool (https://www.pool.ntp.org/join.html).
 {% for item in ntp_servers %}
 pool {{ item }}
 {% endfor %}
@@ -35,16 +35,29 @@ allow {{ item }}
 #authselectmode require
 
 # Specify file containing keys for NTP authentication.
+{% if ntp_keyfile is defined %}
+{# # We're already checking 'defined' in the tasks. One or the other, please. #}
+keyfile {{ ntp_keyfile }}
+{% else %}
 #keyfile /etc/chrony.keys
+{% endif %}
 
 # Save NTS keys and cookies.
+{% if ntp_ntsdumpdir is defined %}
+ntsdumpdir {{ ntp_ntsdumpdir }}
+{% else %}
 #ntsdumpdir /var/lib/chrony
+{% endif %}
 
 # Insert/delete leap seconds by slewing instead of stepping.
 #leapsecmode slew
 
 # Get TAI-UTC offset and leap seconds from the system tz database.
+{% if ntp_leapsectz is defined %}
+leapsectz {{ ntp_leapsectz }}
+{% else %}
 #leapsectz right/UTC
+{% endif %}
 
 # Specify directory for log files.
 logdir /var/log/chrony
