@@ -31,5 +31,8 @@ ntp_tinker_panic: false
 # Clients which are allowed to access chronyd as a server
 ntp_chrony_allow: []
 
+# Set to true to restrict chrony 4.0+ settings from config
+ntp_chrony_old: false
+
 # Allow for settings not yet directly managed by this role
 ntp_custom_settings: []

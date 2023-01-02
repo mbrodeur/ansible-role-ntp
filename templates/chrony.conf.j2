@@ -31,9 +31,16 @@ allow {{ item }}
 # Serve time even if not synchronized to a time source.
 #local stratum 10
 
+{% if not ntp_chrony_old %}
+{#   # Added in chrony 4.0 #}
 # Require authentication (nts or key option) for all NTP sources.
+{%   if ntp_authselectmode is defined %}
+authselectmode {{ ntp_authselectmode }}
+{%   else %}
 #authselectmode require
+{%   endif %}
 
+{% endif %}
 # Specify file containing keys for NTP authentication.
 {% if ntp_keyfile is defined %}
 {# # We're already checking 'defined' in the tasks. One or the other, please. #}
@@ -42,13 +49,16 @@ keyfile {{ ntp_keyfile }}
 #keyfile /etc/chrony.keys
 {% endif %}
 
+{% if not ntp_chrony_old %}
+{#   # Added in chrony 4.0 #}
 # Save NTS keys and cookies.
-{% if ntp_ntsdumpdir is defined %}
+{%   if ntp_ntsdumpdir is defined %}
 ntsdumpdir {{ ntp_ntsdumpdir }}
-{% else %}
+{%   else %}
 #ntsdumpdir /var/lib/chrony
-{% endif %}
+{%   endif %}
 
+{% endif %}
 # Insert/delete leap seconds by slewing instead of stepping.
 #leapsecmode slew
 

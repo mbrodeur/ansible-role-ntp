@@ -6,9 +6,5 @@ __ntp_config_file: /etc/chrony.conf
 __ntp_driftfile: /var/lib/chrony/drift
 ntp_cron_daemon: crond
 
-# These can only be used on EL8 and later (chrony v?)
 __ntp_keyfile: '/etc/chrony.keys'
 __ntp_ntsdumpdir: '/var/lib/chrony'
-__ntp_leapsectz: 'right/UTC'
-
-#leapsecmode slew

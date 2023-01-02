@@ -33,10 +33,13 @@
     ntp_ntsdumpdir: "{{ __ntp_ntsdumpdir }}"
   when: ntp_ntsdumpdir is not defined
 
-- name: 'Set the ntp_leapsectz variable.'
+# Set a flag if we're on a system with a pre-4.0 chrony
+- name: 'Set ntp_chrony_old flag if needed'
   set_fact:
-    ntp_leapsectz: "{{ __ntp_leapsectz }}"
-  when: ntp_leapsectz is not defined
+    ntp_chrony_old: true
+  when:
+    - ansible_facts['os_family'] == "RedHat"
+    - ansible_facts['distribution_major_version'] | int < 8
 # end my local additions
 
 
